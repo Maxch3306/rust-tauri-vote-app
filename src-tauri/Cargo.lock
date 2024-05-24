@@ -2736,6 +2736,7 @@ dependencies = [
 name = "tauri-app"
 version = "0.0.1"
 dependencies = [
+ "cc",
  "futures-util",
  "serde",
  "serde_json",
