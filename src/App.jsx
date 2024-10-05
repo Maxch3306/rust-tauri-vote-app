@@ -35,6 +35,7 @@ function App() {
     if(isValidUrl(youtubeid) == true){
       const urlObj = new URL(youtubeid);
       var _youtubeid = urlObj.searchParams.get('v')
+      console.log("youtubeid: ",_youtubeid)
       setYoutubeid(_youtubeid)
     }
     localStorage.setItem("youtubeid",youtubeid);
