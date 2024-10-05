@@ -15,14 +15,31 @@ function App() {
   const [end, setEnd] = useState(false);
   const [message, setMessage] = useState([])
 
+  function isValidUrl(url) {
+    try {
+        new URL(url);
+        console.log("it is a url")
+        return true; // 如果没有抛出错误，则是有效的 URL
+    } catch (error) {
+        console.log("it is not a url")
+        return false; // 如果抛出错误，则不是有效的 URL
+    }
+  }
+
+
   async function startVote() {
     console.log("clicked")
     if((youtubeid == "" && twitchid == "") || voteiteminit.length == 0 || isVoting){
       return
     }
+    if(isValidUrl(youtubeid) == true){
+      const urlObj = new URL(youtubeid);
+      var _youtubeid = urlObj.searchParams.get('v')
+      setYoutubeid(_youtubeid)
+    }
     localStorage.setItem("youtubeid",youtubeid);
     localStorage.setItem("twitchid",twitchid);
-    invoke("connect_websocket_command",{youtubeid,twitchid,voteiteminit,duration})
+    invoke("connect_websocket_command",{youtubeid,twitchid,voteiteminit,duration});
     setIsVoting(true);
     listen('ws-message', (event) => {
       console.log('Received message from WebSocket:', event.payload);

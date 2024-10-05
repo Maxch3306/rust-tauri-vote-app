@@ -10,9 +10,9 @@ async fn connect_websocket_command(
     youtubeid: String,
     twitchid: String,
     voteiteminit: Vec<String>,
-    duration: String,
+    duration: u64,
 ) -> Result<(), String> {
-    websocket::connect_websocket(&youtubeid, &twitchid, voteiteminit, &duration, window)
+    websocket::connect_websocket(&youtubeid, &twitchid, voteiteminit, duration, window)
         .await
         .map_err(|e| e.to_string())
 }

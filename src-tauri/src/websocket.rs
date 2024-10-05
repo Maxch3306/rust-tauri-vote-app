@@ -6,7 +6,6 @@ use std::time::Duration;
 use tauri::Window;
 use tokio::time::timeout;
 use tokio_tungstenite::{connect_async, tungstenite::protocol::Message};
-use url::Url;
 use tauri::Emitter;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -20,7 +19,7 @@ pub async fn connect_websocket(
     youtubeid: &str,
     twitchid: &str,
     voteiteminit: Vec<String>,
-    duration: &str,
+    duration: u64,
     window: Window,
 ) -> Result<(), Box<dyn Error>> {
     let mut voteduser: Vec<String> = Vec::new();
@@ -35,7 +34,7 @@ pub async fn connect_websocket(
         })
         .collect();
     // Define the WebSocket URL
-    let url = Url::parse("ws://play-ground.dev:6004/v2/protocol/json").unwrap();
+    let url = "wss://play-ground.dev:6004/v2/protocol/json";
     // Connect to the WebSocket server
     let (ws_stream, _) = connect_async(url).await.expect("Failed to connect");
 
@@ -79,7 +78,7 @@ pub async fn connect_websocket(
         let msg_2 = Message::Text(msg_text_2);
         write.send(msg_2).await.expect("Failed to send message");
     }
-    let duration = Duration::from_secs(duration.parse::<u64>().expect("REASON"));
+    let duration = Duration::from_secs(duration);
     match timeout(duration, async {
         while let Some(Ok(msg)) = read.next().await {
             if let Message::Text(text) = msg {
